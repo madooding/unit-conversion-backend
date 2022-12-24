@@ -1,0 +1,90 @@
+diff --git a/node_modules/mongoose/types/index.d.ts b/node_modules/mongoose/types/index.d.ts
+index d3f29e1..5443087 100644
+--- a/node_modules/mongoose/types/index.d.ts
++++ b/node_modules/mongoose/types/index.d.ts
+@@ -32,6 +32,20 @@ declare module 'mongoose' {
+ 
+   export type Mongoose = typeof mongoose;
+ 
++  interface CustomLabels<T = string | undefined | boolean> {
++    totalDocs?: T;
++    docs?: T;
++    limit?: T;
++    page?: T;
++    nextPage?: T;
++    prevPage?: T;
++    hasNextPage?: T;
++    hasPrevPage?: T;
++    totalPages?: T;
++    pagingCounter?: T;
++    meta?: T;
++  }
++
+   /**
+    * Mongoose constructor. The exports object of the `mongoose` module is an instance of this
+    * class. Most apps will only use this one instance.
+diff --git a/node_modules/mongoose/types/models.d.ts b/node_modules/mongoose/types/models.d.ts
+index de5dad3..1219f28 100644
+--- a/node_modules/mongoose/types/models.d.ts
++++ b/node_modules/mongoose/types/models.d.ts
+@@ -447,5 +447,60 @@ declare module 'mongoose' {
+     where<ResultDoc = HydratedDocument<T, TMethodsAndOverrides, TVirtuals>>(path: string, val?: any): QueryWithHelpers<Array<ResultDoc>, ResultDoc, TQueryHelpers, T>;
+     where<ResultDoc = HydratedDocument<T, TMethodsAndOverrides, TVirtuals>>(obj: object): QueryWithHelpers<Array<ResultDoc>, ResultDoc, TQueryHelpers, T>;
+     where<ResultDoc = HydratedDocument<T, TMethodsAndOverrides, TVirtuals>>(): QueryWithHelpers<Array<ResultDoc>, ResultDoc, TQueryHelpers, T>;
++
++    paginate(
++      query?: FilterQuery<T>,
++      options?: PaginateOptions,
++      callback?: (err: any, result: PaginateResult<T>) => void,
++    ): Promise<PaginateResult<T>>
++  }
++
++   interface PaginateOptions {
++    select?: object | string | undefined;
++    collation?: import('mongodb').CollationOptions | undefined;
++    sort?: object | string | undefined;
++    populate?:
++      | PopulateOptions[]
++      | string[]
++      | PopulateOptions
++      | string
++      | PopulateOptions
++      | undefined;
++    projection?: any;
++    lean?: boolean | undefined;
++    leanWithId?: boolean | undefined;
++    offset?: number | undefined;
++    page?: number | undefined;
++    limit?: number | undefined;
++    customLabels?: CustomLabels | undefined;
++    /* If pagination is set to `false`, it will return all docs without adding limit condition. (Default: `true`) */
++    pagination?: boolean | undefined;
++    useEstimatedCount?: boolean | undefined;
++    useCustomCountFn?: (() => Promise<number>) | undefined;
++    forceCountFn?: boolean | undefined;
++    allowDiskUse?: boolean | undefined;
++    read?: ReadOptions | undefined;
++    options?: QueryOptions | undefined;
++  }
++
++  interface ReadOptions {
++    pref: string;
++    tags?: any[] | undefined;
++  }
++
++  interface PaginateResult<T> {
++    docs: T[];
++    totalDocs: number;
++    limit: number;
++    hasPrevPage: boolean;
++    hasNextPage: boolean;
++    page?: number | undefined;
++    totalPages: number;
++    offset: number;
++    prevPage?: number | null | undefined;
++    nextPage?: number | null | undefined;
++    pagingCounter: number;
++    meta?: any;
++    [customLabel: string]: T[] | number | boolean | null | undefined;
+   }
+ }

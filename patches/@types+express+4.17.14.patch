@@ -1,0 +1,24 @@
+diff --git a/node_modules/@types/express/index.d.ts b/node_modules/@types/express/index.d.ts
+index 8427f02..ea84244 100755
+--- a/node_modules/@types/express/index.d.ts
++++ b/node_modules/@types/express/index.d.ts
+@@ -20,6 +20,8 @@ import * as bodyParser from 'body-parser';
+ import * as serveStatic from 'serve-static';
+ import * as core from 'express-serve-static-core';
+ import * as qs from 'qs';
++import { UserDocument } from '@/schemas/user.schema';
++import { ExtractModel, PropertyOf } from '@/types';
+ 
+ /**
+  * Creates an Express application. The express() function is a top-level function exported by the express module.
+@@ -115,7 +117,9 @@ declare namespace e {
+         ReqBody = any,
+         ReqQuery = core.Query,
+         Locals extends Record<string, any> = Record<string, any>
+-    > extends core.Request<P, ResBody, ReqBody, ReqQuery, Locals> {}
++    > extends core.Request<P, ResBody, ReqBody, ReqQuery, Locals> {
++        user?: ExtractModel<UserDocument>
++    }
+     interface RequestHandler<
+         P = core.ParamsDictionary,
+         ResBody = any,
