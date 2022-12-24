@@ -26,10 +26,10 @@ async function bootstrap() {
   )
 
   await app
-    .listen(3000)
+    .listen(process.env.NODE_PORT || 3000)
     .then(() =>
       console.log(
-        `This node is running on ${process.env.NODE_ENV} mode and listening to port ${process.env.NODE_PORT}`,
+        `This node is running on ${process.env.NODE_ENV} mode and listening to port ${process.env.NODE_PORT || 3000}`,
       ),
     )
 }
